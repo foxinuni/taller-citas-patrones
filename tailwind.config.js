@@ -2,7 +2,15 @@
 module.exports = {
   content: ["./core/views/**/*.templ"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "text": "#fafafa",
+        "back": "#18181b",
+        "primary": "#e11d48",
+        "secondary": "#3f3f46",
+        "accent": "#be123c",
+      }
+    },
   },
   plugins: [],
 }

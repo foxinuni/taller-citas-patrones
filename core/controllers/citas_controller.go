@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -73,6 +74,11 @@ func (c *CitaController) GetAll(ctx echo.Context) error {
 			return ctx.JSON(http.StatusInternalServerError, err.Error())
 		}
 	}
+
+	// Se ordenan las citas por hora
+	sort.Slice(citas, func(i, j int) bool {
+		return citas[i].Fecha.Before(citas[j].Fecha)
+	})
 
 	// Se renderiza la vista
 	view := views.ViewCitaList(citas)

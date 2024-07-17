@@ -40,29 +40,29 @@ templ ViewCreateForm(cita *models.Cita) {
 }
 
 templ ComponentCitaTable(citas []models.Cita) {
-    <table>
-        <thead>
+    <table class="min-w-full divide-y divide-accent table-fixed rounded-lg">
+        <thead class="bg-accent">
             <tr>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Cedula</th>
-                <th>Edad</th>
-                <th>Hora</th>
+                <th data-priority="2" class="py-2 px-6 text-left">Nombres</th>
+                <th data-priority="3" class="py-2 px-6 text-left">Apellidos</th>
+                <th data-priority="4" class="py-2 px-6 text-left">Cedula</th>
+                <th data-priority="5" class="py-2 px-6 text-left">Edad</th>
+                <th data-priority="1" class="py-2 px-6 text-left">Hora</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-secondary divide-y divide-accent">
             if len(citas) == 0 {
                 <tr>
-                    <td colspan="5">No hay citas registradas</td>
+                    <td colspan="5" class="py-6 w-full text-center">No hay citas registradas</td>
                 </tr>
             } else {
                 for _, cita := range citas {
                     <tr id={ cita.ID }>
-                        <td>{ cita.Persona.Nombre }</td>
-                        <td>{ cita.Persona.Apellido }</td>
-                        <td>{ cita.Persona.Cedula }</td>
-                        <td>{ strconv.Itoa(cita.Persona.Edad) }</td>
-                        <td>{ cita.Fecha.Format("03:04 PM") }</td>
+                        <td class="py-1 px-6 text-left">{ cita.Persona.Nombre }</td>
+                        <td class="py-1 px-6 text-left">{ cita.Persona.Apellido }</td>
+                        <td class="py-1 px-6 text-left">{ cita.Persona.Cedula }</td>
+                        <td class="py-1 px-6 text-left">{ strconv.Itoa(cita.Persona.Edad) }</td>
+                        <td class="py-1 px-6 text-left">{ cita.Fecha.Format("03:04 PM") }</td>
                     </tr>
                 }
             }
@@ -72,12 +72,16 @@ templ ComponentCitaTable(citas []models.Cita) {
 
 templ ViewCitaList(citas []models.Cita) {
     @Layout("Listado de Citas") {
-        <form action="/citas" method="get">
-            <label for="date">Fecha</label>
-            <input type="date" name="date" id="date" required>
-            <button type="submit">Buscar</button>
-        </form>
+        <div class="p-1 w-1/2 max-w-2xl min-w-fit flex-col items-center">
+            <form action="/citas" method="get" class="min-w-full rounded-lg bg-secondary flex px-4 py-4 mb-2">
+                <div class="flex-1">
+                    <label for="date">Fecha</label>
+                    <input type="date" name="date" id="date" required>
+                </div>
+                <button type="submit">Buscar</button>
+            </form>
 
-        @ComponentCitaTable(citas)
+            @ComponentCitaTable(citas)  
+        </div>
     }
 }
