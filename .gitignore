@@ -1,0 +1,7 @@
+# Ignore data directory (for testing)
+data/
+sec_* 
+
+# Ignore generated files
+*_templ.go
+*_gen.go
