@@ -5,42 +5,68 @@ import (
 	"strconv"
     
     "github.com/foxinuni/citas/core/models"
+	"time"
 )
 
-templ ViewCreateForm(cita *models.Cita) {
-    if cita == nil {
-        <form action="/citas" method="post">
-            <label for="cedula">Cedula</label>
-            <input type="number" name="cedula" id="cedula" inputmode="numeric" pattern="[0-9]+" required>
-            <label for="nombre">Nombres</label>
-            <input type="text" name="nombre" id="nombre" required>
-            <label for="apellido">Apellidos</label>
-            <input type="text" name="apellido" id="apellido" required>
-            <label for="edad">Edad</label>
-            <input type="number" name="edad" id="edad" inputmode="numeric" pattern="[0-9]+" required>
-            <label for="fecha">Fecha</label>
-            <input type="datetime-local" name="fecha" id="fecha" required>
-            <button type="submit">Guardar</button>
+templ ViewCreateForm(cita models.Cita) {
+    @Layout("Manejo Citas") {
+        <form id="citas-form" class="bg-secondary rounded p-5 w-1/2 max-w-2xl min-w-fit flex flex-col items-center" action={ ActionForCita(cita) } method={ MethodForCita(cita) }>
+            <div class="bg-accent rounded flex flex-col p-3 w-full items-center align-center font-medium">
+                <p>A continuación se muestra el formulario para la creación de una cita.</p>
+                <p>Por favor, llene los campos con la información solicitada:</p>
+            </div>
+            <div class="w-full my-4 flex flex-row items-center align-center">
+                <label for="nombre">Nombres:</label>
+                <input class="bg-back flex-1 px-3 py-1 ml-4 rounded" type="text" name="nombre" id="nombre" value={ cita.Persona.Nombre } placeholder="María Elena" required>
+            </div>
+            <div class="w-full my-4 flex flex-row items-center align-center">
+                <label for="apellido">Apellidos:</label>
+                <input class="bg-back flex-1 px-3 py-1 ml-4 rounded"  type="text" name="apellido" id="apellido" value={ cita.Persona.Apellido } placeholder="González Pérez" required>
+            </div>
+            <div class="w-full my-4 flex flex-row items-center align-center">
+                <label for="cedula">Documento:</label>
+                <input class="bg-back flex-1 px-3 py-1 ml-4 rounded appearance-none" type="number" name="cedula" id="cedula" inputmode="numeric" pattern="[0-9]+" value={ cita.Persona.Cedula } placeholder="1234567890" required>
+                <label class="ml-4" for="edad">Edad:</label>
+                <input class="bg-back w-20 px-3 py-1 ml-4 rounded appearance-none" type="number" name="edad" id="edad" inputmode="numeric" pattern="[0-9]+" value={ strconv.Itoa(cita.Persona.Edad) } placeholder="22" required>
+            </div>
+            <div class="w-full my-4 flex flex-row items-center align-center">
+                <label for="fecha">Fecha:</label>
+                <input class="bg-back flex-1 px-3 py-1 ml-4 rounded appearance-none" type="datetime-local" name="fecha" id="fecha" value={ DateForCita(cita) } required>
+                <button class="bg-primary-light flex-1 px-3 py-1 ml-4 rounded font-medium" onclick="window.location.href='/citas'" type="button">Volver</button>
+                <button class="bg-primary flex-1 px-3 py-1 ml-4 rounded font-medium" type="submit">Guardar</button>
+            </div>
         </form>
-    } else {
-        <form action={ templ.URL(fmt.Sprintf("/citas/%s", cita.ID)) } method="put">
-            <label for="cedula">Cedula</label>
-            <input type="number" name="cedula" id="cedula" inputmode="numeric" pattern="[0-9]+" value={ cita.Persona.Cedula } required>
-            <label for="nombre">Nombres</label>
-            <input type="text" name="nombre" id="nombre" value={ cita.Persona.Nombre } required>
-            <label for="apellido">Apellidos</label>
-            <input type="text" name="apellido" id="apellido" value={ cita.Persona.Apellido } required>
-            <label for="edad">Edad</label>
-            <input type="number" name="edad" id="edad" inputmode="numeric" pattern="[0-9]+" value={ strconv.Itoa(cita.Persona.Edad) } required>
-            <label for="fecha">Fecha</label>
-            <input type="datetime-local" name="fecha" id="fecha" value={ cita.Fecha.Format("03:04 PM") } required>
-            <button type="submit">Guardar</button>
-        </form>
+
+        <script src="/static/js/citas-form.js"></script>
     }
 }
 
+func ActionForCita(cita models.Cita) templ.SafeURL {
+    if cita.ID == "" {
+        return templ.URL("/citas")
+    }
+
+    return templ.URL(fmt.Sprintf("/citas/%s", cita.ID))
+}
+
+func MethodForCita(cita models.Cita) string {
+    if cita.ID == "" {
+        return "post"
+    }
+
+    return "put"
+}
+
+func DateForCita(cita models.Cita) string {
+    if cita.Fecha.IsZero() {
+        return time.Now().Format("2006-01-02T15:04")
+    }
+
+    return cita.Fecha.Format("2006-01-02T15:04")
+}
+
 templ ComponentCitaTable(citas []models.Cita) {
-    <table class="min-w-full divide-y divide-accent table-fixed rounded-lg">
+    <table class="min-w-full divide-y divide-accent rounded-lg">
         <thead class="bg-accent">
             <tr>
                 <th data-priority="2" class="py-2 px-6 text-left">Nombres</th>
@@ -58,11 +84,11 @@ templ ComponentCitaTable(citas []models.Cita) {
             } else {
                 for _, cita := range citas {
                     <tr id={ cita.ID }>
-                        <td class="py-1 px-6 text-left">{ cita.Persona.Nombre }</td>
-                        <td class="py-1 px-6 text-left">{ cita.Persona.Apellido }</td>
-                        <td class="py-1 px-6 text-left">{ cita.Persona.Cedula }</td>
-                        <td class="py-1 px-6 text-left">{ strconv.Itoa(cita.Persona.Edad) }</td>
-                        <td class="py-1 px-6 text-left">{ cita.Fecha.Format("03:04 PM") }</td>
+                        <td class="py-2 px-6 text-left">{ cita.Persona.Nombre }</td>
+                        <td class="py-2 px-6 text-left">{ cita.Persona.Apellido }</td>
+                        <td class="py-2 px-6 text-left">{ cita.Persona.Cedula }</td>
+                        <td class="py-2 px-6 text-left">{ strconv.Itoa(cita.Persona.Edad) }</td>
+                        <td class="py-2 px-6 text-left">{ cita.Fecha.Format("03:04 PM") }</td>
                     </tr>
                 }
             }
@@ -70,18 +96,24 @@ templ ComponentCitaTable(citas []models.Cita) {
     </table>
 }
 
-templ ViewCitaList(citas []models.Cita) {
+templ ViewCitaList(citas []models.Cita, date time.Time) {
     @Layout("Listado de Citas") {
-        <div class="p-1 w-1/2 max-w-2xl min-w-fit flex-col items-center">
-            <form action="/citas" method="get" class="min-w-full rounded-lg bg-secondary flex px-4 py-4 mb-2">
-                <div class="flex-1">
-                    <label for="date">Fecha</label>
-                    <input type="date" name="date" id="date" required>
+        <div class="p-1 w-1/2 max-w-2xl min-w-fit flex flex-col items-center">
+            <form action="/citas" method="get" class="min-w-full rounded-lg bg-secondary flex items-center px-4 py-4 mb-2">
+                <div class="flex-1 h-full items-center">
+                    <input class="bg-back rounded px-2 py-1 h-full text-center font-semibold" type="date" name="date" id="date" value={ TranslateTimeToHTML(date) } required>
                 </div>
-                <button type="submit">Buscar</button>
+                <div class="h-full items-center">
+                    <button class="bg-primary-light rounded h-full px-3 py-1 mr-1 text-center items-center font-medium" onclick="window.location.href='/citas/new'" type="button">Agregar</button>
+                    <button class="bg-primary rounded h-full px-3 py-1 text-center items-center font-medium" type="submit">Buscar</button>
+                </div>
             </form>
 
-            @ComponentCitaTable(citas)  
+            @ComponentCitaTable(citas)
         </div>
     }
+}
+
+func TranslateTimeToHTML(t time.Time) string {
+    return t.Format("2006-01-02")
 }

@@ -7,5 +7,5 @@ import (
 type Cita struct {
 	ID      string    `json:"id"`
 	Persona Persona   `json:"persona" validate:"required"`
-	Fecha   time.Time `json:"fecha" validate:"required"`
+	Fecha   time.Time `json:"fecha" form:"fecha" validate:"required"`
 }

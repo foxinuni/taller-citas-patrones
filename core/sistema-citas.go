@@ -34,6 +34,7 @@ func (s *SistemaCitas) Listen() error {
 
 	router.GET("/citas", s.citasController.GetAll)
 	router.POST("/citas", s.citasController.Create)
+	router.GET("/citas/new", s.citasController.New)
 	// router.GET("/citas/:id", s.citasController.GetById)
 	// router.PUT("/citas/:id", s.citasController.Update)
 	// router.DELETE("/citas/:id", s.citasController.Delete)

@@ -81,7 +81,12 @@ func (c *CitaController) GetAll(ctx echo.Context) error {
 	})
 
 	// Se renderiza la vista
-	view := views.ViewCitaList(citas)
+	view := views.ViewCitaList(citas, filters.Date)
+	return RenderComponent(ctx, http.StatusOK, view)
+}
+
+func (c *CitaController) New(ctx echo.Context) error {
+	view := views.ViewCreateForm(models.Cita{})
 	return RenderComponent(ctx, http.StatusOK, view)
 }
 
