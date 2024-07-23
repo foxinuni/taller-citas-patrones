@@ -19,3 +19,13 @@ go install github.com/google/wire/cmd/wire@latest
 ```
 
 El archivo Docker de igual manera contine las instrucciones para crear una maquina que pueda correr el sistema.
+
+
+Correr con docker (importante seleccionar el folder de salida "data" como un folder real):
+```
+docker run -d \
+  --name taller-1-patrones \
+  -v ./data:/app/data \
+  -p 8080:8080 \
+  $(docker build -q https://github.com/foxinuni/taller-1-patrones.git)
+```
