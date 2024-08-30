@@ -1,13 +1,35 @@
 services:
-  postgres:
+  web:
+    image: ghcr.io/foxinuni/taller-citas-patrones:main
+    environment:
+      LISTEN_ADDRESS: 0.0.0.0:8181
+      USE_FS_STORE: false
+      DATABASE_URL: postgresql://citas:citas@db:5432/citas_dev?sslmode=disable
+      MIGRATIONS_SRC: file://migrations
+      DATA_PATH": data
+    ports:
+        - 5060:8181
+    volumes:
+        - data:/app/data
+  db:
     image: postgres:13
     environment:
       POSTGRES_USER: citas
       POSTGRES_PASSWORD: citas
       POSTGRES_DB: citas_dev
-    ports:
-      - "5432:5432"
+
     volumes:
       - postgres:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    ports:
+      - 5061:8080
+  ls:
+    image: nginx:alpine
+    volumes:
+      - data:/usr/share/nginx/html
+    ports:
+      - "80:80"
 volumes:
   postgres:
+  data:
