@@ -11,6 +11,7 @@ services:
         - 5060:8181
     volumes:
         - data:/app/data
+    restart: unless-stopped
   db:
     image: postgres:13
     environment:

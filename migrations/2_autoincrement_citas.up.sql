@@ -4,8 +4,8 @@ CREATE SEQUENCE citas_id_seq;
 CREATE OR REPLACE FUNCTION citas_id_seq()
   RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.id IS NULL THEN
-        NEW.id = nextval('citas_id_seq');
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        NEW.id = nextval('citas_id_seq')::VARCHAR(30);
     END IF;
     RETURN NEW;
     END;
