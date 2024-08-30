@@ -8,6 +8,11 @@ Instalar Air (opcional):
 go install github.com/air-verse/air@latest
 ```
 
+Instalar Go migrate:
+```
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+```
+
 Instalar Templ:
 ```
 go install github.com/a-h/templ/cmd/templ@latest

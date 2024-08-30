@@ -1,6 +1,6 @@
 module github.com/foxinuni/citas
 
-go 1.23
+go 1.22
 
 require (
 	github.com/go-playground/validator v9.31.0+incompatible
@@ -8,7 +8,16 @@ require (
 )
 
 require (
+	github.com/golang-migrate/migrate/v4 v4.17.1 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/lib/pq v1.10.9 // indirect
+	go.uber.org/atomic v1.7.0 // indirect
+)
+
+require (
 	github.com/a-h/templ v0.2.747 // indirect
+	github.com/cristalhq/aconfig v0.18.5
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect

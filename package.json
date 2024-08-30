@@ -7,12 +7,15 @@
     "generate-css": "tailwindcss build -o static/css/tailwind.css --minify",
     "generate": "npm run generate-templ && npm run generate-wire && npm run generate-css",
     "css-dev": "tailwindcss -o ./static/css/tailwind.css --watch",
-    "dev": "air",
+    "dev": "dotenv -- air",
     "build": "npm run generate && mkdir bin && go build -o ./bin ./...",
-    "start": "./bin/webserver"
+    "start": "dotenv -- ./bin/webserver"
   },
   "author": "DownloadableFox",
   "devDependencies": {
     "tailwindcss": "^3.4.6"
+  },
+  "dependencies": {
+    "dotenv-cli": "^7.4.2"
   }
 }

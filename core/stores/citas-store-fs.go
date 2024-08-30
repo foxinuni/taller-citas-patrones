@@ -11,15 +11,13 @@ import (
 	"github.com/foxinuni/citas/core/models"
 )
 
-type FsPath string
-
 type InFsCitaStore struct {
 	path string
 }
 
-func NewInFsCitaStore(relpath FsPath) (CitaStore, error) {
+func NewInFsCitaStore(relpath string) (CitaStore, error) {
 	// Se obtine la ruta absoluta del directorio
-	path, err := filepath.Abs(string(relpath))
+	path, err := filepath.Abs(relpath)
 	if err != nil {
 		return nil, err
 	}

@@ -8,14 +8,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ListenAddress string
-
 type SistemaCitas struct {
-	address         ListenAddress
+	address         string
 	citasController *controllers.CitaController
 }
 
-func NewSistemaCitas(address ListenAddress, citasController *controllers.CitaController) *SistemaCitas {
+func NewSistemaCitas(address string, citasController *controllers.CitaController) *SistemaCitas {
 	return &SistemaCitas{
 		address:         address,
 		citasController: citasController,
