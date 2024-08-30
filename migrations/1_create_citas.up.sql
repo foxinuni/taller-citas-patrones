@@ -4,5 +4,5 @@ CREATE TABLE citas (
   apellido VARCHAR(255) NOT NULL,
   cedula VARCHAR(255) NOT NULL,
   edad INT NOT NULL,
-  fecha TIMESTAMP NOT NULL,
+  fecha TIMESTAMP NOT NULL
 );
