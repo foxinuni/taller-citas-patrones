@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/foxinuni/taller-citas-patrones:main
+    build: .
     environment:
       LISTEN_ADDRESS: 0.0.0.0:8181
       USE_FS_STORE: false
@@ -8,7 +8,7 @@ services:
       MIGRATIONS_SRC: file://migrations
       DATA_PATH": data
     ports:
-        - 5060:8181
+        - 7060:8181
     volumes:
         - data:/app/data
     restart: unless-stopped
@@ -24,13 +24,13 @@ services:
   adminer:
     image: adminer
     ports:
-      - 5061:8080
+      - 7061:8080
   ls:
     image: nginx:alpine
     volumes:
       - data:/usr/share/nginx/html
     ports:
-      - "80:80"
+      - 7062:80
 volumes:
   postgres:
   data:

@@ -47,10 +47,10 @@ func (s *SistemaCitas) Listen() error {
 
 func (s *SistemaCitas) ErrorHandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		log.Info().Msgf("%s %s from [%s]", c.Request().Method, c.Request().URL.Path, c.Request().RemoteAddr)
+		log.Info().Msgf("%-6s %s from [%s]", c.Request().Method, c.Request().URL.Path, c.Request().RemoteAddr)
 
 		if err := next(c); err != nil {
-			log.Error().Err(err).Msg("Error processing request")
+			log.Error().Err(err).Msg("Request processing failed.")
 
 			var code int
 			if he, ok := err.(*echo.HTTPError); ok {

@@ -25,20 +25,15 @@ func (s *PostgresCitaStore) GetAll(filter CitaStoreFilter) ([]models.Cita, error
 		filter.Limit = 10
 	}
 
-	// Check if page is 0
 	var citas []models.Cita
 	rows, err := s.pool.Query(context.Background(), `
 		SELECT id, nombre, apellido, cedula, edad, fecha
 		FROM citas
-		WHERE fecha = $1
+		WHERE fecha::date = $1
 		ORDER BY fecha DESC
 		LIMIT $2 OFFSET $3
 	`, filter.Date, filter.Limit, filter.Limit*(filter.Page-1))
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, ErrCitaNotFound
-		}
-
 		return nil, err
 	}
 	defer rows.Close()
