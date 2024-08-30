@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/foxinuni/citas/core/controllers"
+	"github.com/foxinuni/citas/core/views"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog/log"
 )
 
 type SistemaCitas struct {
@@ -26,6 +28,7 @@ func (s *SistemaCitas) Listen() error {
 	router.HidePort = true
 	router.Validator = &CustomValidator{validator: validator.New()}
 
+	router.Use(s.ErrorHandlerMiddleware)
 	router.GET("/", func(c echo.Context) error {
 		return c.Redirect(http.StatusTemporaryRedirect, "/citas")
 	})
@@ -40,6 +43,28 @@ func (s *SistemaCitas) Listen() error {
 	router.GET("/static/*", echo.WrapHandler(http.StripPrefix("/static/", http.FileServer(http.Dir("static")))))
 
 	return router.Start(string(s.address))
+}
+
+func (s *SistemaCitas) ErrorHandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		log.Info().Msgf("%s %s from [%s]", c.Request().Method, c.Request().URL.Path, c.Request().RemoteAddr)
+
+		if err := next(c); err != nil {
+			log.Error().Err(err).Msg("Error processing request")
+
+			var code int
+			if he, ok := err.(*echo.HTTPError); ok {
+				code = he.Code
+			} else {
+				code = http.StatusInternalServerError
+			}
+
+			view := views.ViewError(err)
+			controllers.RenderComponent(c, code, view)
+		}
+
+		return nil
+	}
 }
 
 type CustomValidator struct {

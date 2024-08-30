@@ -1,0 +1,20 @@
+package views
+
+templ ViewError(err error) {
+    @Layout("Error :(") {
+        <div class="bg-secondary rounded p-5 w-1/2 max-w-2xl min-w-fit flex flex-col items-center">
+            <div class="bg-accent rounded flex flex-col p-3 w-full items-center align-center font-medium">
+                <p>¡Oh no! Algo salió mal.</p>
+                <p>Por favor, intente nuevamente.</p>
+                <p>{errorToString(err)}</p>
+            </div>
+            <div class="w-full my-4 flex flex-row items-center align-center">
+                <button class="bg-primary-light flex-1 px-3 py-1 ml-4 rounded font-medium" onclick="window.location.href='/citas'" type="button">Volver</button>
+            </div>
+        </div>
+    }
+}
+
+func errorToString(err error) string {
+    return err.Error()
+}
