@@ -1,8 +1,8 @@
 CREATE TABLE citas (
-  id VARCHAR(36) PRIMARY KEY,
+  id INT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
   apellido VARCHAR(255) NOT NULL,
   cedula VARCHAR(255) NOT NULL,
   edad INT NOT NULL,
-  fecha DATE NOT NULL
+  fecha TIMESTAMP NOT NULL,
 );
